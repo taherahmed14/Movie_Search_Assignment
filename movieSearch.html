@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <style>
+        *{
+            font-family: sans-serif;
+        }
+        #container{
+            margin: auto;
+            width: 800px;
+        }
+        #movieDetail{
+            margin-top: 50px;
+            width: 70%;
+            height: 50px;
+            border-radius: 10px;
+        }
+        button{
+            width: 20%;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: black;
+            color: white;
+            cursor: pointer;
+        }
+
+        #displayMovie{
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 50px;
+            /* border: 1px solid black; */
+        }
+
+        .content{
+            width: 30%;
+            /* border: 1px solid red; */
+        }
+
+        h3, h5, img{
+            width: 100%;
+        }
+
+        .contentDiv{
+            width: 55%;
+            margin-left: 5%;
+            display: flex;
+            flex-wrap: wrap;
+            /* border: 1px solid blue; */
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div id="container">
+
+        <input type="text" id="movieDetail" placeholder="Enter Movie Name">
+        <button onclick="showMovie()">Search</button>
+        <div id="displayMovie"></div>
+
+    </div>
+
+
+    <script>
+
+        let movieContainer = document.getElementById("displayMovie");
+
+        function showMovie(){
+
+            let movieName = document.getElementById("movieDetail").value;
+
+            fetch(`http://www.omdbapi.com/?t=${movieName}&apikey=387cdacc`)
+            .then(function(res){
+                return res.json();
+            })
+            .then(function(res){
+                console.log(res);
+                showMovieDetail(res);
+            })
+            .catch(function(res) {
+                console.log("Movie Not Found");
+            });
+
+        }
+
+        function showMovieDetail(movie){
+
+            let div = document.createElement("div");
+            div.setAttribute("class", "content");
+
+            let movieImg = document.createElement("img");
+            movieImg.src = movie.Poster;
+
+            let contentDiv = document.createElement("div");
+            contentDiv.setAttribute("class", "contentDiv");
+
+            let movieName = document.createElement("h3");
+            movieName.innerText = movie.Title;
+
+            let movieDir = document.createElement("h5");
+            movieDir.innerText = "Dir. " + movie.Director;
+
+            let movieYear = document.createElement("h5");
+            movieYear.innerText = "Released Year: " + movie.Year;
+
+            let movieRating = document.createElement("h5");
+            movieRating.innerText = "IMDB Rating: " + movie.imdbRating;
+
+            let movieAwards = document.createElement("h5");
+            movieAwards.innerText = "Awards: " + movie.Awards;
+
+            div.append(movieImg);
+
+            contentDiv.append(movieName, movieDir, movieYear,
+            movieRating, movieAwards);
+
+            movieContainer.append(div, contentDiv);
+
+        }
+
+        
+
+        
+
+
+
+
+
+    </script>
+    
+</body>
+</html>
