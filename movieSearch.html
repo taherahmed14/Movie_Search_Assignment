@@ -8,6 +8,7 @@
     <style>
         *{
             font-family: sans-serif;
+            background-color: black;
         }
         #container{
             margin: auto;
@@ -17,14 +18,20 @@
             margin-top: 50px;
             width: 70%;
             height: 50px;
+            border: 1px solid red;
             border-radius: 10px;
+            text-align: center;
+            color: blanchedalmond;
+            font-size: 15px;
         }
         button{
             width: 20%;
             height: 40px;
+            margin-left: 20px;
+            border: 1px solid black;
             border-radius: 10px;
             font-size: 15px;
-            background-color: black;
+            background-color: red;
             color: white;
             cursor: pointer;
         }
@@ -33,7 +40,6 @@
             display: flex;
             flex-wrap: wrap;
             margin-top: 50px;
-            /* border: 1px solid black; */
         }
 
         .content{
@@ -43,6 +49,7 @@
 
         h3, h5, img{
             width: 100%;
+            color: blanchedalmond;
         }
 
         .contentDiv{
@@ -94,7 +101,7 @@
                 else{
                     showMovieDetail(res);
                 }
-                
+
             });
 
         }
@@ -102,7 +109,7 @@
         function showMovieDetail(movie){
 
             movieContainer.innerHTML = null;
-
+            
             let div = document.createElement("div");
             div.setAttribute("class", "content");
 
@@ -113,8 +120,14 @@
             contentDiv.setAttribute("class", "contentDiv");
 
             let movieName = document.createElement("h3");
-            movieName.innerText = movie.Title;
-
+            
+            if(movie.imdbRating >= 8.5){
+                movieName.innerText = movie.Title + " ⭐";
+            }
+            else{
+                movieName.innerText = movie.Title;
+            }
+            
             let movieDir = document.createElement("h5");
             movieDir.innerText = "Dir. " + movie.Director;
 
