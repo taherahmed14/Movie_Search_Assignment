@@ -53,6 +53,11 @@
             /* border: 1px solid blue; */
         }
 
+        .errorImg{
+            height: 500px;
+            object-fit: contain;
+        }
+
 
     </style>
 </head>
@@ -81,15 +86,22 @@
             })
             .then(function(res){
                 console.log(res);
-                showMovieDetail(res);
-            })
-            .catch(function(res) {
-                console.log("Movie Not Found");
+
+                if(res.Response == "False"){
+                    noData();
+                }
+
+                else{
+                    showMovieDetail(res);
+                }
+                
             });
 
         }
 
         function showMovieDetail(movie){
+
+            movieContainer.innerHTML = null;
 
             let div = document.createElement("div");
             div.setAttribute("class", "content");
@@ -123,6 +135,20 @@
             movieContainer.append(div, contentDiv);
 
         }
+
+        function noData() {
+
+            movieContainer.innerHTML = null;
+
+            let errorImg = document.createElement("img");
+            errorImg.src = "https://c.tenor.com/pRVFLHUwS1gAAAAd/esmbot-chungus.gif";
+            errorImg.setAttribute("class", "errorImg");
+            movieContainer.append(errorImg);
+            
+        }
+
+
+                
 
         
 
