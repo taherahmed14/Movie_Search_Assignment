@@ -98,10 +98,36 @@
             object-fit: contain;
         }
 
+        #popularHeading{
+            margin-left: 10%;
+            color: red;
+        }
+
+        #popularMovie{
+            margin: auto;
+            margin-top: 20px;
+            width: 80%;
+            height: 200px;
+            border: 1px solid red;
+            overflow: scroll;
+            overflow-y: hidden;
+            display: flex;
+        }
+
+        .popularDiv{
+            margin: 8px;
+            min-width: 100px;
+            height: 80%;
+            object-fit: contain;
+        }
+
 
     </style>
 </head>
 <body>
+
+    <h2 id="popularHeading">Popular</h2>
+    <div id="popularMovie"></div>
 
     <div id="container">
 
@@ -114,6 +140,49 @@
 
 
     <script>
+
+        let displayBox = document.getElementById("popularMovie");
+
+        async function showPopular(){
+
+            try{
+
+                let res = await fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=1bfa71149049dab63d1557db7acb3495");
+                let data = await res.json();
+
+                console.log(data);
+                displayPopular(data.results);
+        
+            }
+            catch (e){
+
+                console.log(e);
+
+            }
+
+        }
+
+        showPopular();
+
+        function displayPopular(movies){
+
+            movies.forEach(function(movie){
+
+                let div = document.createElement("div");
+                div.setAttribute("class", "popularDiv");
+
+                let img = document.createElement("img");
+                img.src = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
+                img.style.objectFit = "contain";
+                img.style.borderRadius = "10px";
+
+                div.append(img);
+                displayBox.append(div);
+
+            });
+
+        }
+
 
         let movieContainer = document.getElementById("displayMovie");
         let dropDownList = document.getElementById("movieList");
@@ -275,6 +344,18 @@
             movieContainer.append(errorImg);
             
         }
+
+        
+
+
+                
+
+        
+
+        
+
+
+
 
 
     </script>
