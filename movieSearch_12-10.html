@@ -8,7 +8,7 @@
     <style>
         *{
             font-family: sans-serif;
-            background-color: black;  
+            background-color: black; 
         }
         #container{
             margin: auto;
@@ -28,11 +28,13 @@
         }
 
         .movieLs{
-            margin-left: 11%;
-            width: 70%;
+            position: absolute;
+            margin-left: 6%;
+            min-width: 35%;
             height: 200px;
             border: 1px solid red;
             overflow: scroll;
+            overflow-x: hidden;
             background-color: red;
         }
 
@@ -63,8 +65,6 @@
             color: white;
         }
         #displayMovie{
-            height: 400px;
-            /* border: 1px solid green; */
             display: flex;
             flex-wrap: wrap;
             margin-top: 80px;
@@ -73,7 +73,6 @@
 
         .content{
             width: 40%;
-            /* border: 1px solid red; */
         }
 
         h3, h5, img{
@@ -98,19 +97,19 @@
             object-fit: contain;
         }
 
-        #popularHeading{
+        .popularHeading{
             margin-left: 10%;
             color: red;
         }
 
-        #popularMovie{
+        #popularMovie, #topMovie{
             margin: auto;
             margin-top: 20px;
             width: 80%;
             height: 200px;
             border: 1px solid red;
-            overflow: scroll;
             overflow-y: hidden;
+            overflow-x: scroll;
             display: flex;
         }
 
@@ -119,15 +118,13 @@
             min-width: 100px;
             height: 80%;
             object-fit: contain;
+            cursor: pointer;
         }
 
 
     </style>
 </head>
 <body>
-
-    <h2 id="popularHeading">Popular</h2>
-    <div id="popularMovie"></div>
 
     <div id="container">
 
@@ -138,20 +135,33 @@
 
     </div>
 
+    <h2 class="popularHeading">Top Rated</h2>
+    <div id="popularMovie"></div>
+
+    <h2 class="popularHeading">Popular</h2>
+    <div id="topMovie"></div>
+
 
     <script>
 
-        let displayBox = document.getElementById("popularMovie");
+        var displayBox = document.getElementById("popularMovie");
+        var displayTopBox = document.getElementById("topMovie");
 
-        async function showPopular(){
+        async function showPopular(type){
 
             try{
 
-                let res = await fetch("https://api.themoviedb.org/3/movie/top_rated?api_key=1bfa71149049dab63d1557db7acb3495");
+                let res = await fetch(`https://api.themoviedb.org/3/movie/${type}?api_key=1bfa71149049dab63d1557db7acb3495`);
                 let data = await res.json();
 
                 console.log(data);
-                displayPopular(data.results);
+                if(type == "top_rated"){
+                    displayPopular(data.results, displayBox);
+                }
+
+                else if(type == "popular"){
+                    displayPopular(data.results, displayTopBox);
+                }
         
             }
             catch (e){
@@ -161,15 +171,20 @@
             }
 
         }
+        
+        showPopular("top_rated");
+        showPopular("popular");
 
-        showPopular();
-
-        function displayPopular(movies){
-
+        function displayPopular(movies, appendType){
+            
             movies.forEach(function(movie){
 
                 let div = document.createElement("div");
                 div.setAttribute("class", "popularDiv");
+
+                div.onclick = function(){
+                    showMovie(movie.original_title);
+                }
 
                 let img = document.createElement("img");
                 img.src = "https://image.tmdb.org/t/p/w500" + movie.poster_path;
@@ -177,7 +192,7 @@
                 img.style.borderRadius = "10px";
 
                 div.append(img);
-                displayBox.append(div);
+                appendType.append(div);
 
             });
 
@@ -344,19 +359,6 @@
             movieContainer.append(errorImg);
             
         }
-
-        
-
-
-                
-
-        
-
-        
-
-
-
-
 
     </script>
     
